@@ -46,29 +46,67 @@
     color:var(--ink); font-size:26px; font-weight:700; margin:0 0 6px; line-height:1.35;
   }
   header.top .dates{ color:var(--ink-soft); font-size:13px; margin:0; }
+  #leaves{ position:absolute; inset:0; width:100%; height:100%; z-index:0; pointer-events:none; }
+  header.top > .eyebrow, header.top > h1, header.top > .dates, header.top > .clock{ position:relative; z-index:1; }
+  .clock{ margin-top:12px; display:flex; flex-wrap:wrap; gap:6px 16px; font-size:12.5px; color:var(--ink-soft); font-variant-numeric:tabular-nums; }
+  .clock b{ color:var(--ink); font-weight:700; }
+  #countdown{ color:var(--accent-deep); font-weight:700; }
+  @media (prefers-reduced-motion:reduce){ #leaves{ display:none; } }
 
-  /* day selector */
-  .day-scroller{
-    display:flex; gap:8px; padding:16px 20px 0; overflow-x:auto; scrollbar-width:none;
+  /* ---------- top tabs (sticky) ---------- */
+  nav.tabs{ position:sticky; top:0; z-index:20; background:rgba(255,255,255,0.96); backdrop-filter:blur(10px); border-bottom:1px solid var(--line); }
+  .tabrow{ display:flex; gap:4px; overflow-x:auto; scrollbar-width:none; padding:8px 12px; }
+  .tabrow::-webkit-scrollbar{ display:none; }
+  .tab{
+    flex:0 0 auto; border:0; background:transparent; color:var(--ink-soft); font:inherit; font-size:13.5px; font-weight:500;
+    padding:6px 13px; border-radius:999px; cursor:pointer; display:flex; flex-direction:column; align-items:center; line-height:1.25;
   }
-  .day-scroller::-webkit-scrollbar{display:none;}
-  .day-pill{
-    flex:0 0 auto; padding:9px 15px; border-radius:20px; font-size:13px; font-weight:500;
-    color:var(--ink-soft); background:rgba(173,124,76,0.08); border:1px solid rgba(173,124,76,0.18);
-    white-space:nowrap; cursor:pointer;
+  .tab small{ font-size:10px; letter-spacing:.04em; opacity:.8; font-variant-numeric:tabular-nums; }
+  .tab[aria-selected="true"]{ background:var(--accent); color:#fff; }
+
+  /* ---------- overview ---------- */
+  .stack{ display:grid; gap:14px; }
+  .pass{ display:grid; grid-template-columns:1fr auto; background:var(--paper); border:1px solid var(--line); border-radius:14px; overflow:hidden; }
+  .pass .pmain{ padding:12px 14px; min-width:0; }
+  .pass .stub{ border-left:2px dashed var(--line); padding:12px 14px; display:flex; flex-direction:column; justify-content:center; align-items:center; font-size:11.5px; color:var(--ink-soft); text-align:center; gap:2px; }
+  .pass .stub b{ font-size:16px; color:var(--ink); font-family:'Shippori Mincho',serif; }
+  .pass .plabel{ font-size:11px; letter-spacing:.08em; color:var(--accent-deep); font-weight:700; }
+  .route{ display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:10px; margin:6px 0; }
+  .route .t{ font-size:24px; font-weight:700; font-variant-numeric:tabular-nums; font-family:'Shippori Mincho',serif; }
+  .route .bar{ height:1px; background:var(--line); position:relative; }
+  .route .bar span{ position:absolute; left:50%; top:-9px; transform:translateX(-50%); background:var(--paper); padding:0 6px; font-size:10.5px; color:var(--ink-soft); white-space:nowrap; }
+  .ports{ display:flex; justify-content:space-between; gap:8px; font-size:12px; color:var(--ink-soft); }
+  .ov{ display:grid; gap:8px; }
+  .ov button{
+    all:unset; cursor:pointer; display:grid; grid-template-columns:58px 1fr auto; gap:12px; align-items:center;
+    background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:12px 14px;
   }
-  .day-pill b{ font-family:'Shippori Mincho',serif; font-weight:700; margin-right:4px; }
-  .day-pill.active{
-    color:#fff; background:var(--accent);
-    border-color:transparent;
-  }
+  .ov .d{ font-size:11.5px; color:var(--ink-soft); line-height:1.3; font-variant-numeric:tabular-nums; }
+  .ov .d b{ display:block; font-size:20px; color:var(--accent-deep); font-family:'Shippori Mincho',serif; }
+  .ov .tt{ font-weight:700; font-size:14px; }
+  .ov .rt{ font-size:12px; color:var(--ink-soft); }
+  .ov .arr{ color:var(--ink-soft); }
+  .ovstay{ background:var(--paper); border:1px solid var(--line); border-radius:14px; padding:12px 14px; }
+  .ovstay .dates{ font-size:12px; color:var(--accent-deep); font-weight:700; }
+  .ovstay h4{ margin:3px 0 2px; font-size:14.5px; }
+  .ovstay .ad{ font-size:12px; color:var(--ink-soft); }
+  .chip{ display:inline-flex; align-items:center; gap:4px; font-size:12px; padding:3px 11px; border-radius:999px; border:1px solid var(--line); background:var(--paper-2); color:var(--ink); text-decoration:none; margin-top:8px; }
+  .wx{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; }
+  .wx a{ display:block; text-decoration:none; color:var(--ink); background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:10px 12px; min-width:0; }
+  .wx .p{ font-weight:700; font-size:14px; }
+  .wx .w{ font-size:11px; color:var(--ink-soft); }
+  .wx .n{ font-size:16px; margin-top:4px; font-variant-numeric:tabular-nums; font-family:'Shippori Mincho',serif; font-weight:700; }
+  .wx .n .hi{ color:var(--accent-deep); }
+  .wx .n .lo{ color:#5F7F8C; }
+  .wx .src{ font-size:10.5px; color:var(--ink-soft); margin-top:2px; }
+  .wx .tag{ display:inline-block; font-size:10px; padding:0 6px; border-radius:6px; background:var(--paper-2); color:var(--ink-soft); margin-left:4px; vertical-align:2px; font-family:'Noto Sans TC',sans-serif; font-weight:500; }
+  .wx .go{ font-size:11px; color:var(--accent-deep); margin-top:4px; }
+  @media (max-width:440px){ .wx{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
+  .ov-h3{ font-size:14px; margin:6px 2px 0; color:var(--ink); }
+  .stay-pill{ display:inline-flex; gap:6px; align-items:center; font-size:12px; background:var(--paper-2); color:var(--ink); padding:4px 11px; border-radius:999px; margin:0 0 14px; }
 
   /* ---------- Main scroll area ---------- */
-  main{ flex:1; background:var(--paper) radial-gradient(rgba(173,124,76,0.05) 1px, transparent 1.4px) 0 0/16px 16px; border-radius:22px 22px 0 0; margin-top:0; padding:22px 18px calc(96px + var(--safe-bottom)); position:relative; }
-  main::before{
-    content:""; position:absolute; top:10px; left:50%; transform:translateX(-50%);
-    width:38px; height:4px; border-radius:3px; background:var(--line);
-  }
+  main{ flex:1; background:var(--paper) radial-gradient(rgba(173,124,76,0.05) 1px, transparent 1.4px) 0 0/16px 16px; border-radius:0; margin-top:0; padding:22px 18px calc(40px + var(--safe-bottom)); position:relative; }
 
   section.view{ display:none; }
   section.view.active{ display:block; }
@@ -188,30 +226,13 @@
   .pack-progress .bar{ flex:1; height:5px; background:var(--paper-2); border-radius:4px; margin:0 10px; overflow:hidden; }
   .pack-progress .bar i{ display:block; height:100%; background:var(--accent); border-radius:4px; transition:width .3s; }
 
-  /* ---------- Bottom Nav ---------- */
-  nav.bottom{
-    position:fixed; left:0; right:0; bottom:0; z-index:10;
-    display:flex; justify-content:center;
-  }
-  nav.bottom .wrap{
-    width:100%; max-width:520px; display:flex; justify-content:space-around;
-    background:rgba(251,246,236,0.94); backdrop-filter:blur(10px);
-    border-top:1px solid var(--line);
-    padding:9px 4px calc(9px + var(--safe-bottom));
-  }
-  nav.bottom button{
-    background:none; border:none; display:flex; flex-direction:column; align-items:center; gap:4px;
-    color:var(--ink-soft); font-family:inherit; font-size:10.5px; padding:4px 8px; cursor:pointer;
-  }
-  nav.bottom button svg{ width:21px; height:21px; }
-  nav.bottom button.active{ color:var(--accent-deep); }
-  nav.bottom button.active svg{ stroke:var(--accent-deep); }
 </style>
 </head>
 <body>
 <div id="app">
 
   <header class="top">
+    <canvas id="leaves" aria-hidden="true"></canvas>
     <svg class="deco" viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg">
       <!-- distant mountain -->
       <path d="M40 100 L75 55 L100 85 L125 50 L170 100 Z" fill="none" stroke="#AD7C4C" stroke-width="1.4" stroke-opacity="0.35" stroke-linejoin="round"/>
@@ -232,7 +253,7 @@
     <p class="eyebrow">KYOTO · OSAKA 家族旅行</p>
     <h1>京都・大阪 六天五夜</h1>
     <p class="dates">2026.12.04(五) – 12.09(三) ｜ 4人同行</p>
-    <div class="day-scroller" id="dayScroller"></div>
+    <div class="clock"><span>日本 <b id="jst">--:--</b></span><span>台灣 <b id="twt">--:--</b></span><span id="countdown"></span></div>
   </header>
   <div class="wave-divider">
     <svg viewBox="0 0 400 14" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
@@ -240,10 +261,11 @@
     </svg>
   </div>
 
+  <nav class="tabs" aria-label="行程分頁"><div class="tabrow" id="tabrow" role="tablist"></div></nav>
+
   <main>
-    <section class="view active" id="view-itinerary">
-      <div id="dayContent"></div>
-    </section>
+    <section class="view active" id="view-overview"></section>
+    <div id="dayViews"></div>
 
     <section class="view" id="view-transport">
       <h2 class="sec-title">交通總覽</h2>
@@ -324,30 +346,7 @@
     </section>
   </main>
 
-  <nav class="bottom">
-    <div class="wrap">
-      <button class="nav-btn active" data-view="itinerary">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
-        每日行程
-      </button>
-      <button class="nav-btn" data-view="transport">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="5" width="16" height="12" rx="3"/><circle cx="8" cy="20" r="1.4"/><circle cx="16" cy="20" r="1.4"/><path d="M4 11h16"/></svg>
-        交通
-      </button>
-      <button class="nav-btn" data-view="stay">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21V9l9-6 9 6v12"/><path d="M9 21v-7h6v7"/></svg>
-        住宿
-      </button>
-      <button class="nav-btn" data-view="packing">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="7" width="16" height="13" rx="2"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/></svg>
-        行李
-      </button>
-      <button class="nav-btn" data-view="expense">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9 9.5c0-1 1-1.8 3-1.8s3 .8 3 1.8-1 1.5-3 1.8-3 .9-3 1.9 1 1.8 3 1.8 3-.8 3-1.8"/></svg>
-        花費
-      </button>
-    </div>
-  </nav>
+
 
 </div>
 
@@ -501,8 +500,6 @@ const packingData = [
 ];
 
 /* ============ RENDER ITINERARY ============ */
-const dayScroller = document.getElementById('dayScroller');
-const dayContent = document.getElementById('dayContent');
 
 function itemMarkup(it){
   const iconClass = 'type-' + it.type;
@@ -543,22 +540,143 @@ function dayMarkup(day){
   `;
 }
 
-function renderDay(id){
-  const day = tripData.find(d => d.id === id);
-  dayContent.innerHTML = dayMarkup(day);
-  document.querySelectorAll('.day-pill').forEach(p => p.classList.toggle('active', +p.dataset.day === id));
-  document.getElementById('view-itinerary').scrollIntoView({behavior:'instant', block:'start'});
+/* ============ OVERVIEW + DAY SECTIONS ============ */
+const STAYS = [
+  {name:"Via Inn Prime Kyotoeki Hachijoguchi", dates:"12/4 → 12/6", nights:"2 晚（京都）", addr:"44-1 Kamitonoda-cho, Minami-ku, Kyoto", q:"Via Inn Prime Kyotoeki Hachijoguchi"},
+  {name:"Hotel Vischio Osaka-JR Hotel Group", dates:"12/6 → 12/9", nights:"3 晚（大阪梅田）", addr:"2-4-10 Shibata, Kita-ku, Osaka", q:"Hotel Vischio Osaka-JR Hotel Group"}
+];
+const STAY_OF_DAY = {1:0, 2:0, 3:1, 4:1, 5:1};
+
+const FLIGHTS = [
+  {label:"去程・12/4（五）・桃園出發", no:"JX820", dep:"07:40", arr:"11:10", dur:"2h30m", from:"桃園 TPE", to:"關西 KIX"},
+  {label:"去程・12/4（五）・高雄出發", no:"CI166", dep:"07:00", arr:"10:45", dur:"2h45m", from:"高雄 KHH", to:"關西 KIX"},
+  {label:"回程・12/9（三）・回桃園", no:"JX821", dep:"12:20", arr:"14:40", dur:"3h20m", from:"關西 KIX", to:"桃園 TPE"},
+  {label:"回程・12/9（三）・回高雄", no:"CI167", dep:"11:45", arr:"14:35", dur:"3h50m", from:"關西 KIX", to:"高雄 KHH"}
+];
+
+/* 12月平年値(氣象廳 1991–2020,整月平均)。山區無觀測站,用同為山區的能勢站參考。 */
+const WEATHER = [
+  {id:'kyoto',   p:'京都',   when:'12/4（五）', iso:'2026-12-04', hi:11.6, lo:3.5, src:'京都觀測站',        q:'京都 天気',   lat:35.0116, lon:135.7681},
+  {id:'kifune',  p:'貴船',   when:'12/5（六）', iso:'2026-12-05', hi:10.0, lo:0.0, src:'山區參考（能勢站）', q:'貴船 天気',   lat:35.1234, lon:135.7629},
+  {id:'arashi',  p:'嵐山',   when:'12/6（日）', iso:'2026-12-06', hi:11.6, lo:3.5, src:'京都觀測站參考',    q:'嵐山 天気',   lat:35.0094, lon:135.6776},
+  {id:'katsuo',  p:'勝尾寺', when:'12/7（一）', iso:'2026-12-07', hi:10.0, lo:0.0, src:'山區參考（能勢站）', q:'勝尾寺 天気', lat:34.8658, lon:135.4911},
+  {id:'umeda',   p:'梅田',   when:'12/8（二）', iso:'2026-12-08', hi:12.3, lo:5.3, src:'大阪觀測站',        q:'梅田 天気',   lat:34.7055, lon:135.4983}
+];
+function wxCards(){
+  return WEATHER.map(w => `<a id="wx-${w.id}" href="https://www.google.com/search?q=${encodeURIComponent(w.q)}" target="_blank" rel="noopener">
+    <div class="p">${w.p}</div><div class="w">${w.when}</div>
+    <div class="n"><span class="hi">${w.hi.toFixed(1)}°</span> / <span class="lo">${w.lo.toFixed(1)}°</span><span class="tag">例年</span></div>
+    <div class="src">${w.src}</div><div class="go">查當天預報 ↗</div></a>`).join('');
+}
+/* 出發前約 16 天內會有真正的逐日預報,有的話就把「例年」換成「預報」;抓不到就維持例年值 */
+async function loadForecast(){
+  for(const w of WEATHER){
+    try{
+      const url = 'https://api.open-meteo.com/v1/forecast?latitude=' + w.lat + '&longitude=' + w.lon +
+        '&daily=temperature_2m_max,temperature_2m_min&timezone=Asia%2FTokyo&start_date=' + w.iso + '&end_date=' + w.iso;
+      const r = await fetch(url);
+      if(!r.ok) continue;
+      const j = await r.json();
+      const hi = j.daily && j.daily.temperature_2m_max ? j.daily.temperature_2m_max[0] : null;
+      const lo = j.daily && j.daily.temperature_2m_min ? j.daily.temperature_2m_min[0] : null;
+      if(hi == null || lo == null) continue;
+      const card = document.getElementById('wx-' + w.id);
+      card.querySelector('.n').innerHTML = '<span class="hi">' + hi.toFixed(1) + '°</span> / <span class="lo">' + lo.toFixed(1) + '°</span><span class="tag">預報</span>';
+    }catch(e){}
+  }
 }
 
-tripData.forEach(d => {
-  const pill = document.createElement('div');
-  pill.className = 'day-pill';
-  pill.dataset.day = d.id;
-  pill.innerHTML = `<b>Day ${d.id}</b>${d.tag}`;
-  pill.addEventListener('click', () => renderDay(d.id));
-  dayScroller.appendChild(pill);
-});
-renderDay(1);
+function passHTML(f){
+  return `<div class="pass"><div class="pmain"><div class="plabel">${f.label}</div>
+    <div class="route"><span class="t">${f.dep}</span><span class="bar"><span>${f.dur}</span></span><span class="t">${f.arr}</span></div>
+    <div class="ports"><span>${f.from}</span><span>${f.to}</span></div></div>
+    <div class="stub"><span>航班</span><b>${f.no}</b></div></div>`;
+}
+
+function buildOverview(){
+  const dayBtns = tripData.map(d => {
+    const date = d.tag.replace(/（.*）/, '');
+    return `<button data-go="day${d.id}"><span class="d"><b>${String(d.id).padStart(2,'0')}</b>${date}</span>
+      <span><span class="tt">${d.title}</span><br><span class="rt">${d.summary}</span></span><span class="arr">›</span></button>`;
+  }).join('');
+  const stayCards = STAYS.map(st => `<div class="ovstay"><div class="dates">${st.dates}・${st.nights}</div>
+      <h4>${st.name}</h4><div class="ad">${st.addr}</div>
+      <a class="chip" href="${mapSearchUrl(st.q)}" target="_blank" rel="noopener">${ICONS.pin}地圖</a></div>`).join('');
+  document.getElementById('view-overview').innerHTML = `<div class="stack">
+    <div><h2 class="sec-title">行程總覽</h2><p class="sec-sub">點任一天看時間表。日本時間比台灣快 1 小時。</p></div>
+    <h3 class="ov-h3">航班</h3>
+    ${FLIGHTS.map(passHTML).join('')}
+    <h3 class="ov-h3">各地氣溫（每人帶保暖衣物）</h3>
+    <div class="wx">${wxCards()}</div>
+    <h3 class="ov-h3">住宿</h3>
+    ${stayCards}
+    <h3 class="ov-h3">每日行程</h3>
+    <div class="ov">${dayBtns}</div>
+  </div>`;
+}
+
+function buildDays(){
+  const host = document.getElementById('dayViews');
+  host.innerHTML = tripData.map(d => {
+    const si = STAY_OF_DAY[d.id];
+    const pill = si !== undefined ? `<div class="stay-pill">今晚住：${STAYS[si].name}</div>` : `<div class="stay-pill">今天退房，搭機返台</div>`;
+    return `<section class="view" id="view-day${d.id}">${dayMarkup(d).replace('</div>\n    <div class="timeline">', '</div>' + pill + '\n    <div class="timeline">')}</section>`;
+  }).join('');
+}
+buildOverview();
+buildDays();
+loadForecast();
+
+/* ============ 時鐘 + 出發倒數 ============ */
+function jstNow(){
+  const parts = new Intl.DateTimeFormat('en-CA', {timeZone:'Asia/Tokyo', year:'numeric', month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit', hourCycle:'h23'}).formatToParts(new Date());
+  const g = t => parts.find(x => x.type === t).value;
+  return {y:+g('year'), mo:+g('month'), d:+g('day'), h:g('hour'), mi:g('minute')};
+}
+function tick(){
+  try{
+    const n = jstNow();
+    document.getElementById('jst').textContent = n.mo + '/' + n.d + ' ' + n.h + ':' + n.mi;
+    const tw = new Intl.DateTimeFormat('en-GB', {timeZone:'Asia/Taipei', month:'numeric', day:'numeric', hour:'2-digit', minute:'2-digit', hourCycle:'h23'}).formatToParts(new Date());
+    const t = k => tw.find(x => x.type === k).value;
+    document.getElementById('twt').textContent = t('month') + '/' + t('day') + ' ' + t('hour') + ':' + t('minute');
+    const start = Date.UTC(2026, 11, 4), today = Date.UTC(n.y, n.mo - 1, n.d);
+    const diff = Math.round((start - today) / 864e5);
+    document.getElementById('countdown').textContent = diff > 0 ? '出發倒數 ' + diff + ' 天' : (diff >= -5 ? '旅行第 ' + (1 - diff) + ' 天' : '');
+  }catch(e){}
+}
+tick(); setInterval(tick, 20000);
+
+/* ============ 標題區楓葉緩緩飄落 ============ */
+function leaves(){
+  if(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const c = document.getElementById('leaves'); if(!c || !c.getContext) return;
+  const ctx = c.getContext('2d'); let W = 0, H = 0; const dpr = Math.min(2, window.devicePixelRatio || 1);
+  const cols = ['#C8463A', '#E07A3E', '#D8A33A', '#A8332B'];
+  const L = Array.from({length:16}, () => ({x:Math.random(), y:Math.random(), s:8 + Math.random()*7, v:.18 + Math.random()*.27, r:Math.random()*6.28, vr:(Math.random()-.5)*.012, w:Math.random()*6.28, c:cols[Math.floor(Math.random()*4)]}));
+  function size(){ W = c.clientWidth; H = c.clientHeight; c.width = W*dpr; c.height = H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0); }
+  /* 楓葉輪廓：右半邊 [角度(從正上方順時針), 半徑]，左半邊鏡射 */
+  const HALF = [[0,1],[9,.66],[20,.74],[27,.52],[42,.78],[52,.62],[63,1],[76,.62],[88,.74],[98,.52],[112,.7],[124,.9],[140,.5],[160,.52],[172,.36]];
+  const OUT = HALF.concat(HALF.slice(1).reverse().map(a => [360 - a[0], a[1]]));
+  function leaf(s, color){
+    ctx.beginPath();
+    OUT.forEach((a, i) => { const t = a[0] * Math.PI / 180, x = Math.sin(t) * a[1] * s, y = -Math.cos(t) * a[1] * s; i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); });
+    ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = color; ctx.lineWidth = Math.max(1, s * .1); ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(0, s * .3); ctx.lineTo(0, s * .95); ctx.stroke();
+  }
+  size(); window.addEventListener('resize', size);
+  (function frame(){
+    ctx.clearRect(0,0,W,H);
+    L.forEach(l => {
+      l.y += l.v / Math.max(H,1); l.w += .006; l.r += l.vr;
+      if(l.y > 1.05){ l.y = -.05; l.x = Math.random(); }
+      ctx.save(); ctx.translate(l.x*W + Math.sin(l.w)*14, l.y*H); ctx.rotate(l.r); ctx.globalAlpha = .55; ctx.fillStyle = l.c; leaf(l.s, l.c); ctx.restore();
+    });
+    requestAnimationFrame(frame);
+  })();
+}
+leaves();
 
 /* ============ RENDER PACKING ============ */
 const packListEl = document.getElementById('packList');
@@ -630,16 +748,38 @@ function updateExpensePage(){
 }
 updateExpensePage();
 
-/* ============ NAV SWITCHING ============ */
-document.querySelectorAll('.nav-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-    document.getElementById('view-' + btn.dataset.view).classList.add('active');
-    window.scrollTo({top:0, behavior:'instant'});
+/* ============ TOP TABS + HASH ROUTING ============ */
+const TABS = [
+  {id:'overview', l:'總覽', s:'OVERVIEW'},
+  ...tripData.map(d => ({id:'day'+d.id, l:'Day '+d.id, s:d.tag.replace(/（.*）/, '')})),
+  {id:'transport', l:'交通', s:'FARE'},
+  {id:'stay', l:'住宿', s:'STAY'},
+  {id:'packing', l:'行李', s:'PACK'},
+  {id:'expense', l:'花費', s:'COST'}
+];
+document.getElementById('tabrow').innerHTML = TABS.map(t =>
+  `<button class="tab" role="tab" data-id="${t.id}">${t.l}<small>${t.s}</small></button>`).join('');
+
+function show(id){
+  if(!TABS.some(t => t.id === id)) id = 'overview';
+  document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === 'view-' + id));
+  document.querySelectorAll('.tab').forEach(b => {
+    const on = b.dataset.id === id;
+    b.setAttribute('aria-selected', on);
+    if(on) b.scrollIntoView({block:'nearest', inline:'center'});
   });
+}
+function go(id){
+  if(location.hash !== '#' + id) location.hash = id; else show(id);
+  window.scrollTo({top:0});
+}
+document.addEventListener('click', e => {
+  const el = e.target.closest('.tab, [data-go]');
+  if(!el) return;
+  go(el.dataset.id || el.dataset.go);
 });
+window.addEventListener('hashchange', () => show(location.hash.slice(1)));
+show(location.hash.slice(1) || 'overview');
 </script>
 </body>
 </html>
