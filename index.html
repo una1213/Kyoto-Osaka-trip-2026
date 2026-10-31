@@ -102,6 +102,29 @@
   .wx .tag{ display:inline-block; font-size:10px; padding:0 6px; border-radius:6px; background:var(--paper-2); color:var(--ink-soft); margin-left:4px; vertical-align:2px; font-family:'Noto Sans TC',sans-serif; font-weight:500; }
   .wx .go{ font-size:11px; color:var(--accent-deep); margin-top:4px; }
   @media (max-width:440px){ .wx{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
+  .umap{ display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:6px; align-items:stretch; margin:10px 0 6px; }
+  .node{ display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:10px 4px; min-height:64px;
+    border-radius:12px; border:1px solid transparent; text-decoration:none; color:var(--ink); font-weight:700; font-size:13px; line-height:1.3; }
+  .node small{ font-weight:500; font-size:10.5px; opacity:.8; }
+  .n-hanshin{ background:#EFE3F6; border-color:#DCC7EC; } .n-daimaru{ background:#E3E1F7; border-color:#CFCBEF; }
+  .n-hankyu{ background:#DFF0F8; border-color:#C2E1EF; } .n-lucua{ background:#F7E1E1; border-color:#EBC7C7; }
+  .n-osaka{ background:#F6E0F0; border-color:#E8C6DE; } .n-l1100{ background:#FAEBDD; border-color:#F0D6BD; }
+  .n-yodo{ background:#F1F6DC; border-color:#DDE8B8; } .n-links{ background:#E1F4DD; border-color:#C5E4BE; }
+  .n-gf{ background:#F8F1DB; border-color:#EADFB6; }
+  .cx{ display:flex; align-items:center; justify-content:center; font-size:11px; color:var(--ink-soft); gap:4px; }
+  .cx.h::before, .cx.h::after{ content:""; flex:1; border-top:1px dashed #CDBFA6; }
+  .cx.v{ min-height:30px; }
+  .cx.v::before{ content:""; align-self:stretch; border-left:1px dashed #CDBFA6; margin-right:4px; }
+  #view-umeda .ov-h3{ margin:18px 2px 8px; }
+  .umap-note{ font-size:11.5px; color:var(--ink-soft); line-height:1.7; margin:0 2px 14px; }
+  .bld{ background:var(--paper); border:1px solid var(--line); border-radius:14px; padding:12px 14px; margin-bottom:10px; }
+  .bld .bh{ display:flex; justify-content:space-between; align-items:baseline; gap:10px; }
+  .bld .bh a{ color:var(--ink); font-weight:700; font-size:14.5px; text-decoration:none; border-bottom:1px solid var(--accent); }
+  .bld .hrs{ font-size:12px; color:var(--accent-deep); font-weight:700; white-space:nowrap; }
+  .bld .hnote{ font-size:11px; color:var(--ink-soft); margin-top:2px; }
+  .bld ul{ list-style:none; margin:8px 0 0; padding:0; }
+  .bld li{ display:flex; justify-content:space-between; gap:10px; font-size:13px; padding:6px 0; border-top:1px dashed var(--line); }
+  .bld li .fl{ color:var(--ink-soft); font-size:12px; white-space:nowrap; }
   .ov-h3{ font-size:14px; margin:6px 2px 0; color:var(--ink); }
   .stay-pill{ display:inline-flex; gap:6px; align-items:center; font-size:12px; background:var(--paper-2); color:var(--ink); padding:4px 11px; border-radius:999px; margin:0 0 14px; }
 
@@ -266,6 +289,8 @@
   <main>
     <section class="view active" id="view-overview"></section>
     <div id="dayViews"></div>
+
+    <section class="view" id="view-umeda"></section>
 
     <section class="view" id="view-transport">
       <h2 class="sec-title">交通總覽</h2>
@@ -462,18 +487,16 @@ const tripData = [
 },
 {
   id:5, tag:"12/8（二）", title:"梅田購物日",
-  summary:"整天逛梅田周邊各大百貨,飯店就在附近,睡飽一點悠閒開始。",
+  summary:"照你的逛街清單：阪急 → 阪神 → LUCUA → LINKS → Alpen OSAKA，飯店就在附近，睡飽一點悠閒開始。樓層和營業時間看「梅田」分頁。",
   items:[
     {type:"rest", time:"10:00", title:"飯店出發", desc:"睡飽一點,悠閒開始"},
-    {type:"sight", time:"10:00–10:45", title:"阪急うめだ本店", desc:"名牌樓層、B1美食街", mapQuery:"阪急うめだ本店"},
-    {type:"sight", time:"10:45–11:15", title:"阪神梅田本店", desc:"B1名物「阪神虎屋」美食、伴手禮", mapQuery:"阪神梅田本店"},
-    {type:"sight", time:"11:15–11:45", title:"大丸梅田店", desc:"精品、藥妝樓層", mapQuery:"大丸梅田店"},
-    {type:"meal", time:"12:00–13:00", title:"鰻の中庄 LINKS UMEDA店", badge:"午餐", desc:"鰻魚飯配天婦羅套餐,評價很高,離車站近", cost:"¥2,500–3,500/人", hours:"11:00–23:00", mapQuery:"鰻の中庄 LINKS UMEDA"},
-    {type:"sight", time:"13:00–13:45", title:"LUCUA・LUCUA 1100", desc:"流行服飾、雜貨、美食街", mapQuery:"LUCUA 1100"},
-    {type:"sight", time:"13:45–14:15", title:"NU chayamachi", desc:"年輕品牌、選物店", mapQuery:"NU chayamachi"},
-    {type:"sight", time:"14:15–15:45", title:"Grand Front Osaka", desc:"精品、生活雜貨、美食街", mapQuery:"グランフロント大阪"},
-    {type:"sight", time:"15:45–16:45", title:"HEP FIVE・HEP NAVIO", desc:"年輕品牌、藥妝、Big Camera", mapQuery:"HEP FIVE"},
-    {type:"sight", time:"16:45–18:00", title:"繼續逛街、休息", desc:"依當天狀況彈性安排"},
+    {type:"sight", time:"10:00–11:30", title:"阪急うめだ本店", desc:"LV、Dior（5–6F）、伊東屋（10F）", mapQuery:"阪急うめだ本店"},
+    {type:"sight", time:"11:30–12:15", title:"阪神梅田本店", desc:"華歌爾（4F）、無印良品（7F）、伴手禮（B1・1F）", mapQuery:"阪神梅田本店"},
+    {type:"sight", time:"12:15–13:30", title:"LUCUA・LUCUA 1100", desc:"PEACH JOHN（6F）、3COINS+plus、GU（B1F）", mapQuery:"LUCUA osaka"},
+    {type:"meal", time:"13:30–14:30", title:"鰻の中庄 LINKS UMEDA店", badge:"午餐", desc:"鰻魚飯配天婦羅套餐,評價很高,在 LINKS 8 樓", cost:"¥2,500–3,500/人", hours:"11:00–23:00", mapQuery:"鰻の中庄 LINKS UMEDA"},
+    {type:"sight", time:"14:30–16:00", title:"LINKS UMEDA", desc:"UNIQLO（1–2F）、BUNBUN（7F）、3COINS", mapQuery:"LINKS UMEDA"},
+    {type:"sight", time:"16:00–17:30", title:"Alpen OSAKA", desc:"茶屋町,要買 HOKA、ON。館內 B2–4F,營業到 21:00", mapQuery:"Alpen OSAKA 茶屋町"},
+    {type:"sight", time:"17:30–18:30", title:"自由逛街、休息", desc:"還有體力的話可以選逛:大丸梅田店、Grand Front Osaka、友都八喜"},
     {type:"meal", time:"18:30", title:"晚餐", badge:"待安排・交給大家決定", desc:"梅田周邊", cost:"", pending:true},
     {type:"rest", time:"20:30", title:"返回飯店,整理行李"}
   ],
@@ -625,6 +648,62 @@ function buildDays(){
 }
 buildOverview();
 buildDays();
+
+/* ============ 梅田逛街地圖 ============ */
+const UP = {
+  hanshin:  {zh:'阪神', en:'HANSHIN', q:'阪神梅田本店', hrs:'10:00–20:00', note:'餐廳樓層時間可能不同', cls:'n-hanshin'},
+  daimaru:  {zh:'大丸', en:'DAIMARU', q:'大丸梅田店', hrs:'10:00–20:00', note:'', cls:'n-daimaru'},
+  hankyu:   {zh:'阪急', en:'HANKYU', q:'阪急うめだ本店', hrs:'10:00–20:00', note:'12–13F 餐廳 11:00–22:00', cls:'n-hankyu'},
+  lucua:    {zh:'LUCUA', en:'', q:'LUCUA osaka', hrs:'10:30–20:30', note:'', cls:'n-lucua'},
+  osaka:    {zh:'大阪站', en:'OSAKA', q:'大阪駅', hrs:'', note:'JR 車站，沒有營業時間', cls:'n-osaka'},
+  l1100:    {zh:'LUCUA 1100', en:'', q:'LUCUA 1100', hrs:'10:30–23:00', note:'Google 標示的時間，餐廳與商店可能不同', cls:'n-l1100'},
+  yodo:     {zh:'友都八喜', en:'YODOBASHI', q:'ヨドバシ梅田', hrs:'9:30–22:00', note:'', cls:'n-yodo'},
+  links:    {zh:'LINKS', en:'', q:'LINKS UMEDA', hrs:'10:00–21:00', note:'友都八喜與餐廳營業到更晚', cls:'n-links'},
+  alpen:    {zh:'Alpen OSAKA', en:'', q:'Alpen OSAKA 茶屋町', hrs:'10:00–21:00', note:'茶屋町，不在上面那張地圖裡；館內 B2–4F', cls:'n-lucua'},
+  gfs:      {zh:'GRAND FRONT 南館', en:'', q:'グランフロント大阪 南館', hrs:'11:00–21:00', note:'整個 GRAND FRONT 的時間，餐廳樓層可能更晚', cls:'n-gf'},
+  gfn:      {zh:'GRAND FRONT 北館', en:'', q:'グランフロント大阪 北館', hrs:'11:00–21:00', note:'整個 GRAND FRONT 的時間，餐廳樓層可能更晚', cls:'n-gf'}
+};
+const SHOPS = [
+  {k:'hankyu', title:'阪急', items:[['LV・Dior','5–6F'],['伊東屋','10F']]},
+  {k:'hanshin', title:'阪神', items:[['華歌爾','4F'],['無印良品','7F'],['伴手禮','B1・1F']]},
+  {k:'lucua', title:'LUCUA', items:[['PEACH JOHN','6F'],['3COINS+plus','樓層待確認']]},
+  {k:'l1100', title:'LUCUA 1100', items:[['GU','B1F']]},
+  {k:'links', title:'LINKS UMEDA', items:[['UNIQLO','1–2F'],['BUNBUN','7F'],['3COINS','約 3–4F（舊資料，待確認）']]},
+  {k:'alpen', title:'Alpen OSAKA', items:[['HOKA','樓層待確認'],['ON','樓層待確認']]}
+];
+function node(k, col, row){
+  const u = UP[k];
+  return '<a class="node ' + u.cls + '" style="grid-column:' + col + ';grid-row:' + row + '" href="' + mapSearchUrl(u.q) + '" target="_blank" rel="noopener">' +
+    u.zh + (u.en ? '<small>' + u.en + '</small>' : '') + '</a>';
+}
+function cx(cls, label, col, row){ return '<div class="cx ' + cls + '" style="grid-column:' + col + ';grid-row:' + row + '">' + label + '</div>'; }
+function bldCard(k, shops){
+  const u = UP[k];
+  const hrs = u.hrs ? '<span class="hrs">' + u.hrs + '</span>' : '';
+  const note = u.note ? '<div class="hnote">' + u.note + '</div>' : '';
+  const list = shops ? '<ul>' + shops.map(i => '<li><span>' + i[0] + '</span><span class="fl">' + i[1] + '</span></li>').join('') + '</ul>' : '';
+  return '<div class="bld"><div class="bh"><a href="' + mapSearchUrl(u.q) + '" target="_blank" rel="noopener">' + u.zh + (u.en ? ' ' + u.en : '') + '</a>' + hrs + '</div>' + note + list + '</div>';
+}
+function buildUmeda(){
+  const map = '<div class="umap">' +
+    node('hanshin','1/3',1) + cx('h','3 分','3/4',1) + node('daimaru','4/7',1) +
+    cx('v','4 分','1/3',2) + cx('v','2 分','4/7',2) +
+    node('hankyu','1/3',3) + node('lucua','3/4',3) + node('osaka','4/6',3) + node('l1100','6/7',3) +
+    cx('v','3 分','4/6',4) +
+    node('yodo','1/3',5) + cx('h','1 分','3/4',5) + node('gfs','4/7',5) +
+    node('links','1/3','6/8') + cx('v','1 分','4/7',6) + node('gfn','4/7',7) +
+    '</div>';
+  const mine = SHOPS.map(g => bldCard(g.k, g.items)).join('');
+  const others = ['daimaru','yodo','gfs','gfn','osaka'].map(k => bldCard(k)).join('');
+  document.getElementById('view-umeda').innerHTML =
+    '<h2 class="sec-title">梅田逛街地圖</h2>' +
+    '<p class="sec-sub">點方塊上的名字會開 Google 地圖，方塊之間的數字是步行分鐘。</p>' + map +
+    '<p class="umap-note">地圖依你給的逛街圖重畫（原圖的「GRANT FRONT」是拼錯，這裡寫成 GRAND FRONT）。</p>' +
+    '<h3 class="ov-h3">要逛的店（照逛街順序）</h3>' + mine +
+    '<h3 class="ov-h3">其他館的營業時間</h3>' + others +
+    '<p class="umap-note">營業時間取自 Google 地圖與官方資訊，年底年初或活動期間可能調整，出發前再確認一次。樓層是你提供的資料，現場請以館內樓層指南為準。</p>';
+}
+buildUmeda();
 loadForecast();
 
 /* ============ 時鐘 + 出發倒數 ============ */
@@ -752,6 +831,7 @@ updateExpensePage();
 const TABS = [
   {id:'overview', l:'總覽', s:'OVERVIEW'},
   ...tripData.map(d => ({id:'day'+d.id, l:'Day '+d.id, s:d.tag.replace(/（.*）/, '')})),
+  {id:'umeda', l:'梅田', s:'MAP'},
   {id:'transport', l:'交通', s:'FARE'},
   {id:'stay', l:'住宿', s:'STAY'},
   {id:'packing', l:'行李', s:'PACK'},
